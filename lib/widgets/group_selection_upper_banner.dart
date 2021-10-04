@@ -26,7 +26,7 @@ class GroupSelectionUpperBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Hero(
-      tag: 'upper_banner_${backgroundColor}',
+      tag: displayedTitle,
       child: Material(
         type: MaterialType.transparency,
         child: Container(

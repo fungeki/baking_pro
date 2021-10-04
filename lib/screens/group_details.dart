@@ -1,7 +1,7 @@
 import 'package:baking_pro/Utils/transitions.dart';
 import 'package:baking_pro/objects/group.dart';
 import 'package:baking_pro/screens/profile_page.dart';
-import 'package:baking_pro/widgets/ProfileImageWidget.dart';
+import 'package:baking_pro/widgets/profile_image_widget.dart';
 import 'package:baking_pro/widgets/group_selection_upper_banner.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +46,7 @@ class _GroupDetailsState extends State<GroupDetails> {
             flex: 3,
             child: GroupSelectionUpperBanner(
               backgroundColor: group.color,
-              displayedTitle: '',
+              displayedTitle: group.title,
               subTitle: '',
               isTitled: true,
               imageURI: group.imageURI,

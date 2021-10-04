@@ -14,7 +14,7 @@ class ImageDetails extends StatelessWidget {
         backgroundColor: Colors.transparent,
         body: Center(
           child: Hero(
-            tag: 'image_details_$imageURI',
+            tag: imageURI,
             child: Image.asset(
               imageURI,
               fit: BoxFit.cover,

@@ -1,3 +1,4 @@
+import 'package:baking_pro/Utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavigationBarBakezone extends StatefulWidget {
@@ -40,7 +41,7 @@ class _BottomNavigationBarBakezoneState
         BottomNavigationBarItem(
             icon: Icon(Icons.group),
             label: 'קבוצות',
-            backgroundColor: Color(0xFFEFBF7B)),
+            backgroundColor: kBakeZoneOrange),
         BottomNavigationBarItem(
             icon: Icon(Icons.circle_notifications),
             label: 'הודעות',

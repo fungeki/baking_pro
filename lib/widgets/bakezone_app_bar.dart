@@ -2,29 +2,43 @@ import 'package:baking_pro/Utils/transitions.dart';
 import 'package:baking_pro/screens/profile_page.dart';
 import 'package:flutter/material.dart';
 
-import 'ProfileImageWidget.dart';
+import 'profile_image_widget.dart';
 
 class BakeZoneAppbar extends StatefulWidget with PreferredSizeWidget {
-  final bool isProfilePage;
+  final bool isProfileImageLeading;
+  final bool? isProfileImageTrailing;
   @override
-  _BakeZoneAppbarState createState() => _BakeZoneAppbarState(isProfilePage);
+  _BakeZoneAppbarState createState() =>
+      _BakeZoneAppbarState(isProfileImageLeading, isProfileImageTrailing);
 
   @override
   // TODO: implement preferredSize
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 
-  BakeZoneAppbar({required this.isProfilePage});
+  BakeZoneAppbar(
+      {required this.isProfileImageLeading, this.isProfileImageTrailing});
 }
 
 class _BakeZoneAppbarState extends State<BakeZoneAppbar> {
-  final bool isMyProfilePage;
+  final bool isProfileImageLeading;
+  final bool? isProfileImageTrailing;
+  List<Widget> _appBarActions() {
+    final isTrailing = isProfileImageTrailing ?? false;
+    final actions = [
+      ProfileImageForAppbar(
+          isProfilePage: false,
+          padding: EdgeInsets.only(left: 16.0, top: 12.0, bottom: 12.0))
+    ];
+    return isTrailing ? actions : [];
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: true,
-      leading: isMyProfilePage
-          ? BackButton()
-          : ProfileImageForAppbar(isProfilePage: isMyProfilePage),
+      leading: isProfileImageLeading
+          ? ProfileImageForAppbar(isProfilePage: !isProfileImageLeading)
+          : BackButton(),
       title: SizedBox(
         height: kToolbarHeight,
         child: Image.asset(
@@ -32,27 +46,30 @@ class _BakeZoneAppbarState extends State<BakeZoneAppbar> {
           fit: BoxFit.fitHeight,
         ),
       ),
+      actions: _appBarActions(),
     );
   }
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 
-  _BakeZoneAppbarState(this.isMyProfilePage);
+  _BakeZoneAppbarState(this.isProfileImageLeading, this.isProfileImageTrailing);
 }
 
 class ProfileImageForAppbar extends StatelessWidget {
   const ProfileImageForAppbar({
+    this.padding,
     Key? key,
     required this.isProfilePage,
   }) : super(key: key);
 
   final bool isProfilePage;
+  final EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(0.0, 8.0, 16, 8.0),
+      padding: padding ?? EdgeInsets.fromLTRB(0.0, 8.0, 16, 8.0),
       child: InkWell(
         onTap: () {
           if (!isProfilePage) {

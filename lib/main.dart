@@ -1,4 +1,5 @@
 import 'package:baking_pro/screens/group_browse.dart';
+import 'package:baking_pro/screens/group_browse_list_page.dart';
 import 'package:baking_pro/screens/zift_page.dart';
 import 'package:baking_pro/widgets/bakezone_app_bar.dart';
 import 'package:baking_pro/widgets/bottom_navigation_bar_bakezone.dart';
@@ -20,7 +21,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   int _currentPage = 1;
 
-  final _mainPages = [ZiftPage(), GroupBrowse(), ZiftPage()];
+  final _mainPages = [ZiftPage(), GroupBrowseListPage(), ZiftPage()];
   void _changePage(int switchToPage) {
     setState(() {
       //     Navigator.of(context).popUntil((route) => route.isFirst);
@@ -53,7 +54,7 @@ class _MyAppState extends State<MyApp> {
       supportedLocales: [Locale('he', 'IL')],
       home: Scaffold(
         appBar: BakeZoneAppbar(
-          isProfilePage: false,
+          isProfileImageLeading: true,
         ),
         backgroundColor: Theme.of(context).backgroundColor,
         body: SafeArea(

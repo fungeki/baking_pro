@@ -1,3 +1,4 @@
+import 'package:baking_pro/Utils/constants.dart';
 import 'package:baking_pro/objects/group.dart';
 import 'package:baking_pro/screens/group_details.dart';
 import 'package:baking_pro/widgets/group_selection_lower_banner.dart';
@@ -5,41 +6,6 @@ import 'package:baking_pro/widgets/group_selection_upper_banner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
-
-final List<Group> groups = [
-  Group(
-    Colors.green,
-    'קבוצת היכרות',
-    'ספרו על עצמכם',
-    'images/welcome.jpg',
-    'images/video_placeholder.jpg',
-    'חדשים בזון? למה לא תקפצו לומר שלום? בטוח משהו טוב מתבשל פה',
-  ),
-  Group(
-    Colors.orangeAccent,
-    'שיתוף מתכונים',
-    'עשו זאת בעמצכם',
-    'images/recipe_header.jpg',
-    'images/video_placeholder_recipes.jpg',
-    'מחמש דקות למתחילים ועד חמש שכבות למומחים, זה בידיים שלכם.',
-  ),
-  Group(
-    Colors.yellow,
-    'שיתוף השראות',
-    'עם טיפה שינוי....',
-    'images/welcome.jpg',
-    'images/video_placeholder.jpg',
-    'עשיתם מתכון עם שינויים ויצא לכם סוף? ספרו לנו',
-  ),
-  Group(
-    Colors.pink,
-    'קבוצת כשלונות',
-    'מי מצטרף לסושי?',
-    'images/fails_header.png',
-    'images/video_placeholder_fails.jpg',
-    'שריפות, התחממות גלובלית, החלפת סוכר במלח, האסונות המתוקים שלנו',
-  ),
-];
 
 class GroupBrowse extends StatefulWidget {
   @override

@@ -1,6 +1,6 @@
 import 'package:baking_pro/Utils/constants.dart';
 import 'package:baking_pro/screens/image_deatils.dart';
-import 'package:baking_pro/widgets/ProfileImageWidget.dart';
+import 'package:baking_pro/widgets/profile_image_widget.dart';
 import 'package:baking_pro/widgets/bakezone_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -15,110 +15,25 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final tabBar = ProfileActivityTabBar();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   List<String> images = [
-    'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
-    // 'images/cover.jpg',
+    'images/placeholderRecipe1.jpg',
+    'images/placeholderRecipe2.jpg',
+    'images/placeholderRecipe3.jpg',
+    'images/placeholderRecipe4.jpg',
+    'images/placeholderRecipe5.jpg',
+    'images/placeholderRecipe6.jpg',
+    'images/placeholderRecipe7.jpg',
+    'images/placeholderRecipe8.jpg',
+    'images/placeholderRecipe9.jpg',
+    'images/placeholderRecipe10.jpg',
+    'images/placeholderRecipe11.png',
+    'images/placeholderRecipe12.jpg',
   ];
   final tabsColor = Colors.black;
   final profileInfoCard = ProfileInfoCard();
@@ -126,90 +41,123 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BakeZoneAppbar(
-        isProfilePage: true,
+        isProfileImageLeading: false,
       ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: images.length > 6
-              ? TabControllerForMultipleActivities(
-                  images: images,
-                  profileInfoCard: profileInfoCard,
-                  tabBar: tabBar,
-                )
-              : NoScrollingActivityProfile(
-                  tabBar: tabBar,
-                  images: images,
-                  profileInfoCard: profileInfoCard,
-                ),
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            child: TabControllerForMultipleActivities(
+              images: images,
+              profileInfoCard: profileInfoCard,
+              tabBar: tabBar,
+            ),
+          ),
         ),
       ),
     );
   }
 }
 
-class NoScrollingActivityProfile extends StatefulWidget {
-  const NoScrollingActivityProfile({
-    Key? key,
-    required this.tabBar,
-    required this.images,
-    required this.profileInfoCard,
-  }) : super(key: key);
+class ProfileImagesTab extends StatelessWidget {
+  const ProfileImagesTab({Key? key, required this.images}) : super(key: key);
 
-  final ProfileActivityTabBar tabBar;
   final List<String> images;
-  final ProfileInfoCard profileInfoCard;
-
-  @override
-  _NoScrollingActivityProfileState createState() =>
-      _NoScrollingActivityProfileState();
-}
-
-class _NoScrollingActivityProfileState
-    extends State<NoScrollingActivityProfile> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ProfileInfoCard(),
-        Expanded(
-          child: DefaultTabController(
-            length: 3,
-            child: Scaffold(
-              appBar: widget.tabBar,
-              body: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TabBarView(
-                    children: [1, 2, 3]
-                        .map((e) => GridView.count(
-                              physics: BouncingScrollPhysics(),
-                              crossAxisCount: 3,
-                              shrinkWrap: true,
-                              mainAxisSpacing: 2.0,
-                              crossAxisSpacing: 2.0,
-                              children: widget.images
-                                  .map((e) => InkResponse(
-                                        enableFeedback: true,
-                                        onTap: () => coverToDetails(context),
-                                        child: Image(
-                                          image: AssetImage(e),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ))
-                                  .toList(),
-                            ))
-                        .toList(),
+    return GridView.count(
+      physics: BouncingScrollPhysics(),
+      crossAxisCount: 3,
+      shrinkWrap: true,
+      mainAxisSpacing: 2.0,
+      crossAxisSpacing: 2.0,
+      children: images
+          .map((e) => InkResponse(
+                enableFeedback: true,
+                onTap: () => coverToDetails(context, e),
+                child: Hero(
+                  tag: e,
+                  child: Material(
+                    child: Image(
+                      image: AssetImage(e),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ),
-        ),
-      ],
+              ))
+          .toList(),
     );
   }
 }
+
+// class NoScrollingActivityProfile extends StatefulWidget {
+//   const NoScrollingActivityProfile({
+//     Key? key,
+//     required this.tabBar,
+//     required this.images,
+//     required this.profileInfoCard,
+//   }) : super(key: key);
+//
+//   final ProfileActivityTabBar tabBar;
+//   final List<String> images;
+//   final ProfileInfoCard profileInfoCard;
+//
+//   @override
+//   _NoScrollingActivityProfileState createState() =>
+//       _NoScrollingActivityProfileState();
+// }
+//
+// class _NoScrollingActivityProfileState
+//     extends State<NoScrollingActivityProfile> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: [
+//         ProfileInfoCard(),
+//         Expanded(
+//           child: DefaultTabController(
+//             length: 3,
+//             child: Scaffold(
+//               appBar: widget.tabBar,
+//               body: Card(
+//                 child: Padding(
+//                   padding: const EdgeInsets.all(8.0),
+//                   child: TabBarView(
+//                     children: [1, 2, 3]
+//                         .map((e) => GridView.count(
+//                               physics: BouncingScrollPhysics(),
+//                               crossAxisCount: 3,
+//                               shrinkWrap: true,
+//                               mainAxisSpacing: 2.0,
+//                               crossAxisSpacing: 2.0,
+//                               children: widget.images
+//                                   .map((e) => InkResponse(
+//                                         enableFeedback: true,
+//                                         onTap: () => coverToDetails(context, e),
+//                                         child: Hero(
+//                                           tag: e,
+//                                           child: Material(
+//                                             child: Image(
+//                                               image: AssetImage(e),
+//                                               fit: BoxFit.cover,
+//                                             ),
+//                                           ),
+//                                         ),
+//                                       ))
+//                                   .toList(),
+//                             ))
+//                         .toList(),
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
 
 class TabControllerForMultipleActivities extends StatelessWidget {
   const TabControllerForMultipleActivities({
@@ -229,38 +177,23 @@ class TabControllerForMultipleActivities extends StatelessWidget {
       length: 3,
       child: NestedScrollView(
         body: TabBarView(
-          children: [1, 2, 3]
-              .map((e) => GridView.count(
-                    physics: BouncingScrollPhysics(),
-                    crossAxisCount: 3,
-                    shrinkWrap: true,
-                    mainAxisSpacing: 2.0,
-                    crossAxisSpacing: 2.0,
-                    children: images
-                        .take(21)
-                        .map((e) => GridTile(
-                              child: InkWell(
-                                enableFeedback: true,
-                                onTap: () {
-                                  coverToDetails(context);
-                                },
-                                child: Image(
-                                  image: AssetImage(e),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ))
-                        .toList(),
-                  ))
-              .toList(),
+          children: [
+            ProfileImagesTab(images: images),
+            Center(
+              child: Text('recipes'),
+            ),
+            Center(
+              child: Text('comments'),
+            )
+          ].toList(),
         ),
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
             SliverAppBar(
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               flexibleSpace: profileInfoCard,
-              expandedHeight: 384.0,
-              toolbarHeight: 384.0,
+              expandedHeight: 400.0,
+              toolbarHeight: 400.0,
               leading: Container(),
             ),
             SliverPersistentHeader(
@@ -366,13 +299,12 @@ class ProfileInfoCard extends StatelessWidget {
             children: <Widget>[
               InkWell(
                 onTap: () {
-                  coverToDetails(context);
+                  coverToDetails(context, 'images/cover.jpg');
                 },
                 child: Padding(
-                  padding:
-                      EdgeInsets.only(bottom: (kProfileImageSize / 5) * 3.5),
+                  padding: EdgeInsets.only(bottom: (kProfileImageSize / 5) * 4),
                   child: Hero(
-                    tag: 'image_details_images/cover.jpg',
+                    tag: 'images/cover.jpg',
                     child: Image.asset(
                       'images/cover.jpg',
                       fit: BoxFit.fitWidth,
@@ -397,8 +329,7 @@ class ProfileInfoCard extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                         child: Hero(
-                          tag:
-                              'image_details_images/bakeoff_winners_cropped.jpeg',
+                          tag: 'images/bakeoff_winners_cropped.jpeg',
                           child: Container(
                             decoration: BoxDecoration(
                               border:
@@ -428,10 +359,7 @@ class ProfileInfoCard extends StatelessWidget {
                 const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
             child: Text(
               'ניצן קריבין',
-              style: GoogleFonts.assistant(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w900,
-                  color: kBlackTextColor),
+              style: kProfileHeaderTextStyle,
             ),
           ),
           Padding(
@@ -458,7 +386,7 @@ class ProfileInfoCard extends StatelessWidget {
                       'עריכת פרופיל',
                       style: GoogleFonts.assistant(
                         fontSize: 16.0,
-                        color: Colors.black,
+                        color: kBlackTextColor,
                       ),
                     ),
                   )),
@@ -470,9 +398,9 @@ class ProfileInfoCard extends StatelessWidget {
   }
 }
 
-void coverToDetails(BuildContext context) {
+void coverToDetails(BuildContext context, String imageURI) {
   Navigator.push(context, MaterialPageRoute(builder: (_) {
-    return ImageDetails(imageURI: 'images/cover.jpg');
+    return ImageDetails(imageURI: imageURI);
   }));
 }
 
