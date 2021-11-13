@@ -3,6 +3,7 @@ import 'package:baking_pro/objects/ingredients_measure_type.dart';
 class Ingredient {
   String title;
   String? amount;
+  String? grams;
   IngredientsMeasureType ingredientsMeasureType;
 
   Ingredient(

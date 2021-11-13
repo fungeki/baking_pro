@@ -2,8 +2,6 @@ import 'dart:io';
 import 'package:baking_pro/Utils/constants.dart';
 import 'package:baking_pro/objects/recipe_difficulty_type.dart';
 import 'package:baking_pro/objects/recipe_post.dart';
-import 'package:baking_pro/widgets/BakeZoneTextField.dart';
-import 'package:baking_pro/widgets/bakezone_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -81,7 +79,6 @@ class _InputRecipeInitDataPageState extends State<InputRecipeInitDataPage> {
     return (MediaQuery.of(context).size.width / 2.5);
   }
 
-  String hint = 'מיאו';
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -151,12 +148,14 @@ class _InputRecipeInitDataPageState extends State<InputRecipeInitDataPage> {
                   Padding(
                     padding: EdgeInsets.only(top: 16.0, left: 8.0, right: 8.0),
                     child: freeWritingTextFieldBuilder(
-                        'שם המתכון', titleController),
+                        'שם המתכון', titleController,
+                        maxLength: 30),
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 16.0, left: 8.0, right: 8.0),
                     child: freeWritingTextFieldBuilder(
-                        'תיאור המתכון', descriptionController),
+                        'תיאור המתכון', descriptionController,
+                        maxLength: 80),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -192,6 +191,11 @@ class _InputRecipeInitDataPageState extends State<InputRecipeInitDataPage> {
                         children: RecipeDifficultyType.values.map((e) {
                           return ChoiceChip(
                             selected: e == difficulty,
+                            onSelected: (isSelected) {
+                              setState(() {
+                                difficulty = e;
+                              });
+                            },
                             label: Container(
                               width: double.infinity,
                               child: Text(
@@ -215,10 +219,12 @@ class _InputRecipeInitDataPageState extends State<InputRecipeInitDataPage> {
   }
 
   TextField freeWritingTextFieldBuilder(
-      String hint, TextEditingController controller) {
+      String hint, TextEditingController controller,
+      {int? maxLength}) {
     return TextField(
       minLines: 1,
       maxLines: 2,
+      maxLength: maxLength,
       controller: controller,
       decoration: InputDecoration(
         border: OutlineInputBorder(),
@@ -321,10 +327,13 @@ class _InputRecipeInitDataPageState extends State<InputRecipeInitDataPage> {
     int totalMinutes = int.parse(totalMinutesController.text);
     totalMinutes += (int.parse(totalHoursController.text) * 60);
     totalMinutes += (int.parse(totalDaysController.text) * 60 * 24);
-    RecipePost(
+    final recipe = RecipePost(
         title: title,
         description: description,
         totalTime: totalMinutes,
-        workTime: workMinutes);
+        workTime: workMinutes,
+        ingredientsHeadlines: [],
+        stepsHeadlines: []);
+    widget.nextPressed(recipe);
   }
 }
