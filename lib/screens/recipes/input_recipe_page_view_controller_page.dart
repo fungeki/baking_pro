@@ -1,6 +1,8 @@
 import 'package:baking_pro/objects/ingredient.dart';
 import 'package:baking_pro/objects/recipe_ingredient_headlines.dart';
 import 'package:baking_pro/objects/recipe_post.dart';
+import 'package:baking_pro/objects/recipe_step.dart';
+import 'package:baking_pro/objects/recipe_steps_headlines.dart';
 import 'package:baking_pro/screens/recipes/input_recipe_add_ingredients_page.dart';
 import 'package:baking_pro/screens/recipes/input_recipe_add_steps_page.dart';
 import 'package:baking_pro/screens/recipes/input_recipe_init_data_page.dart';
@@ -91,7 +93,9 @@ class _InputRecipePagaeViewControllerPageState
         nextPressed: onInputIngredientNextPressed,
       ),
       InputRecipeAddStepsPage(
+        displayDelete: false,
         backPressed: () => animateToPage(currentIndex - 1),
+        nextPressed: onInputStepsNextPressed,
       ),
     ];
     originPagesList = inputPages;
@@ -106,6 +110,41 @@ class _InputRecipePagaeViewControllerPageState
       return createNewHeadline(headline, index + 1);
     } else
       return newHeadline;
+  }
+
+  onInputStepsNextPressed(List<RecipeStep> steps, String headline) {
+    List<RecipeStep> trimmed = List.from(steps);
+    trimmed.removeLast();
+    final headlineIndex = recipeStepsIndexes[headline];
+    final totalPages =
+        recipeStepsIndexes.length + recipeIngredientsIndexes.length + 1;
+    bool isLastPage = totalPages == currentIndex;
+    String newHeadline = headline;
+    if (recipeStepsIndexes.containsKey(headline)) {
+      if (steps.length == 0) {
+        steps.add(RecipeStep.empty());
+      }
+      if (currentIndex != headlineIndex!) {
+        newHeadline = createNewHeadline(headline, 2);
+      }
+
+      if (currentIndex + 1 < inputPages.length) {
+        final stepsLocation =
+            currentIndex - finalRecipe.ingredientsHeadlines.length - 1;
+        finalRecipe.stepsHeadlines[stepsLocation].steps = steps;
+        inputPages[currentIndex + 1] is InputRecipeAddIngredients
+            ? isLastPage = false
+            : isLastPage = true;
+      } else {
+        isLastPage = true;
+      }
+    } else {
+      finalRecipe.stepsHeadlines.add(RecipeStepsHeadlines(headline, trimmed));
+    }
+    print("last page is: $isLastPage");
+    isLastPage
+        ? buildDialogToAddStepsPage(newHeadline)
+        : animateToPage(currentIndex + 1);
   }
 
   onInputIngredientNextPressed(List<Ingredient> ingredients, String headline) {
@@ -131,7 +170,6 @@ class _InputRecipePagaeViewControllerPageState
       finalRecipe.ingredientsHeadlines
           .add(RecipeIngredientHeadline(headline, trimmed));
     }
-    print(isLastPage);
     isLastPage
         ? buildDialogToAddIngredientPage(newHeadline)
         : animateToPage(currentIndex + 1);
@@ -143,6 +181,113 @@ class _InputRecipePagaeViewControllerPageState
     } else {
       animateToPage(3);
     }
+  }
+
+  void buildDialogToAddStepsPage(String headline) {
+    recipeStepsIndexes[headline] = currentIndex;
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('הוספת עמוד שלבי הכנה'),
+        content: const Text('האם להוסיף עמוד שלבי הכנה נוסף?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              hasEmptyIngredientInputPage = false;
+              animateToPage(currentIndex + 1);
+            },
+            child: const Text('לא'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              hasEmptyIngredientInputPage = true;
+              final currentPage =
+                  inputPages[currentIndex] as InputRecipeAddStepsPage;
+
+              if (currentPage.key != null) {
+                final pageKey = currentPage.key! as GlobalKey;
+                pageKey.currentState!.setState(() {
+                  currentPage.displayDelete = false;
+                });
+              }
+              buildNewStepsInputPage();
+            },
+            child: const Text('הוספת עמוד'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void buildNewStepsInputPage() {
+    final index = currentIndex + 1;
+    setState(() {
+      inputPages.insert(
+          index,
+          InputRecipeAddStepsPage(
+              key: GlobalKey(),
+              backPressed: () => animateToPage(currentIndex - 1),
+              onDelete: onStepsPageDeletePressed,
+              displayDelete: true,
+              nextPressed: onInputStepsNextPressed));
+      animateToPage(index);
+    });
+  }
+
+  void onStepsPageDeletePressed() {
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('מחיקת עמוד'),
+        content: const Text('מחיקת העמוד תסיר את כל הוראות ההכנה כולל התמונות'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('ביטול'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              deleteStepsPage();
+            },
+            child: const Text('מחיקה'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void deleteStepsPage() {
+    final currentPage = inputPages[currentIndex - 1] as InputRecipeAddStepsPage;
+    if (currentPage.key != null) {
+      final pageKey = currentPage.key! as GlobalKey;
+      pageKey.currentState!.setState(() {
+        currentPage.displayDelete = true;
+      });
+    }
+    String keyToDelete = '';
+    recipeStepsIndexes.forEach((key, value) {
+      if (value == currentIndex) {
+        keyToDelete = key;
+        final headlineLocation = currentIndex - recipeIngredientsIndexes.length;
+        if (finalRecipe.stepsHeadlines.length >= headlineLocation) {
+          finalRecipe.stepsHeadlines.removeAt(headlineLocation);
+        }
+      }
+    });
+    if (keyToDelete.length > 1) {
+      recipeStepsIndexes.remove(keyToDelete);
+    }
+
+    final pageToDelete = inputPages[currentIndex];
+    setState(() {
+      inputPages.remove(pageToDelete);
+      animateToPage(currentIndex - 1);
+    });
   }
 
   void buildDialogToAddIngredientPage(String headline) {

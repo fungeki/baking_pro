@@ -4,5 +4,6 @@ class RecipeStepsHeadlines {
   List<RecipeStep> steps;
   String headline;
 
+  RecipeStepsHeadlines(this.headline, this.steps);
   RecipeStepsHeadlines.name(this.steps, this.headline);
 }

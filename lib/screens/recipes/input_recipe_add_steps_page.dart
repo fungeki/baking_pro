@@ -9,10 +9,18 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:image_picker/image_picker.dart';
 
 class InputRecipeAddStepsPage extends StatefulWidget {
-  const InputRecipeAddStepsPage({Key? key, required this.backPressed})
+  InputRecipeAddStepsPage(
+      {Key? key,
+      required this.backPressed,
+      required this.displayDelete,
+      required this.nextPressed,
+      this.onDelete})
       : super(key: key);
 
   final VoidCallback backPressed;
+  bool displayDelete;
+  final Function nextPressed;
+  final VoidCallback? onDelete;
   @override
   _InputRecipeAddStepsPageState createState() =>
       _InputRecipeAddStepsPageState();
@@ -22,6 +30,7 @@ class _InputRecipeAddStepsPageState extends State<InputRecipeAddStepsPage>
     with AutomaticKeepAliveClientMixin {
   List<RecipeStep> steps = [RecipeStep.empty()];
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
+  final _headlineTextFieldController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
   final _listScrollController = ScrollController();
 
@@ -101,6 +110,55 @@ class _InputRecipeAddStepsPageState extends State<InputRecipeAddStepsPage>
     }
   }
 
+  TextField buildTextFieldForHeadline() {
+    return TextField(
+      controller: _headlineTextFieldController,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        labelText: 'כותרת לשלבי הכנה (רשות)',
+        focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: kBakeZoneGreen)),
+        labelStyle: GoogleFonts.assistant(
+          color: kBakeZoneGreen,
+        ),
+      ),
+    );
+  }
+
+  void _onNextPressed() {
+    FocusManager.instance.primaryFocus?.unfocus();
+    String headline = _headlineTextFieldController.text;
+    if (headline.length < 1) headline = 'כללי';
+    widget.nextPressed(steps, headline);
+  }
+
+  List<Widget> buildActionWidgets() {
+    List<Widget> actionBarWidgets = [];
+    if (widget.displayDelete)
+      actionBarWidgets.add(
+        Container(
+          child: IconButton(
+            icon: Icon(
+              Icons.delete_sweep_outlined,
+              color: kBakeZoneOrange,
+            ),
+            onPressed: widget.onDelete,
+          ),
+        ),
+      );
+    actionBarWidgets.add(Container(
+      width: 60,
+      child: TextButton(
+        onPressed: () => _onNextPressed(),
+        child: Text(
+          'הבא',
+          textAlign: TextAlign.end,
+        ),
+      ),
+    ));
+    return actionBarWidgets;
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -123,23 +181,13 @@ class _InputRecipeAddStepsPageState extends State<InputRecipeAddStepsPage>
                     ),
                   ),
                   Expanded(
-                    child: Center(
-                      child: Text(
-                        'הוספת הוראות הכנה',
-                        style: kGroupHeadlineTextStyle,
-                      ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Container(
+                          height: 45, child: buildTextFieldForHeadline()),
                     ),
                   ),
-                  Container(
-                    width: 60,
-                    child: TextButton(
-                      onPressed: () => {},
-                      child: Text(
-                        'הבא',
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  )
+                  ...buildActionWidgets()
                 ],
               ),
             ),
